@@ -60,7 +60,7 @@ let converted = try Polymark.transform("**Жирный**", from: .markdown, to: 
 
 ## Автор
 
-[Алексей Симоненко](https://github.com/meritt)
+[Алексей Симоненко](https://simonenko.xyz)
 
 ## Лицензия
 
