@@ -2,7 +2,7 @@
 import Foundation
 import PackageDescription
 
-let release: (url: String, checksum: String)? = nil
+let release: (url: String, checksum: String)? = (url: "https://github.com/meritt/polymark.rs/releases/download/v0.1.0/polymark-v0.1.0-xcframework.zip", checksum: "4e98c72aa0108efaf4ca7a61c4805df4835386cd1b23c2e14d2966b7fcd32c37")
 
 let local = "packages/swift/PolymarkFFI.xcframework"
 let ffi: Target
