@@ -1,0 +1,271 @@
+{
+  "format": 1,
+  "transform": [
+    {
+      "name": "markdown to html keeps marks and links",
+      "from": "markdown",
+      "to": "html",
+      "input": "**Жирный** и [ссылка](https://simonenko.xyz)",
+      "want": { "result": "<p><strong>Жирный</strong> и <a href=\"https://simonenko.xyz\">ссылка</a></p>", "warnings": {} }
+    },
+    {
+      "name": "markdown to html keeps breaks, bare links and code languages",
+      "from": "markdown",
+      "to": "html",
+      "input": "# T\n\na\nb https://e.com\n\n```js\nx\n```",
+      "want": {
+        "result": "<h1>T</h1>\n<p>a<br>b <a href=\"https://e.com\">https://e.com</a></p>\n<pre><code class=\"language-js\">x</code></pre>",
+        "warnings": {}
+      }
+    },
+    {
+      "name": "markdown to html links web and mail addresses",
+      "from": "markdown",
+      "to": "html",
+      "input": "see www.site.ru and me@mail.ru",
+      "want": {
+        "result": "<p>see <a href=\"http://www.site.ru\">www.site.ru</a> and <a href=\"mailto:me@mail.ru\">me@mail.ru</a></p>",
+        "warnings": {}
+      }
+    },
+    {
+      "name": "markdown to html numbers footnotes at the end",
+      "from": "markdown",
+      "to": "html",
+      "input": "a[^x] b\n\n[^x]: first",
+      "want": { "result": "<p>a[1] b</p>\n<ol><li>first</li></ol>", "warnings": { "footnotes": 1 } }
+    },
+    {
+      "name": "markdown to html shows raw html as text",
+      "from": "markdown",
+      "to": "html",
+      "input": "a <b>x</b> c",
+      "want": { "result": "<p>a &lt;b&gt;x&lt;/b&gt; c</p>", "warnings": { "rawHtml": 2 } }
+    },
+    {
+      "name": "markdown round trip in canonical form",
+      "from": "markdown",
+      "to": "markdown",
+      "input": "**a** _b_ ~~c~~ `d`\n\n- [x] e\n\n1. f",
+      "want": { "result": "**a** *b* ~~c~~ `d`\n\n- [x] e\n\n1. f", "warnings": {} }
+    },
+    {
+      "name": "markdown to plain lays a table out with tabs",
+      "from": "markdown",
+      "to": "plain",
+      "input": "|a|b|\n|-|-|\n|1|2|",
+      "want": { "result": "a\tb\n1\t2", "warnings": { "tables": 1 } }
+    },
+    {
+      "name": "markdown to rich carries a plain text version",
+      "from": "markdown",
+      "to": "rich",
+      "input": "**a**",
+      "want": { "result": "<p><strong>a</strong></p>", "plain": "a", "warnings": {} }
+    },
+    {
+      "name": "markdown to telegram escapes reserved characters",
+      "from": "markdown",
+      "to": "telegram",
+      "input": "Цена: 1.5 *скидка*",
+      "want": { "result": "Цена: 1\\.5 _скидка_", "warnings": {} }
+    },
+    {
+      "name": "markdown to telegram keeps links",
+      "from": "markdown",
+      "to": "telegram",
+      "input": "**a.b** [c](https://e.com)",
+      "want": { "result": "*a\\.b* [c](https://e.com)", "warnings": {} }
+    },
+    {
+      "name": "markdown to telegram writes lists and tasks as text",
+      "from": "markdown",
+      "to": "telegram",
+      "input": "- one\n- [ ] two",
+      "want": { "result": "\\- one\n\\- \\[ \\] two", "warnings": {} }
+    },
+    {
+      "name": "html to markdown",
+      "from": "html",
+      "to": "markdown",
+      "input": "<p>Привет, <em>мир</em></p>",
+      "want": { "result": "Привет, *мир*", "warnings": {} }
+    },
+    {
+      "name": "html to markdown writes headings, links and tables",
+      "from": "html",
+      "to": "markdown",
+      "input": "<h2>T</h2><p>a <b>b</b> <a href=\"https://e.com\">e</a></p><table><tr><th>x</th></tr><tr><td>1</td></tr></table>",
+      "want": { "result": "## T\n\na **b** [e](https://e.com)\n\n| x |\n| --- |\n| 1 |", "warnings": {} }
+    },
+    {
+      "name": "html to markdown escapes text that would start a block",
+      "from": "html",
+      "to": "markdown",
+      "input": "<p>1. a</p><p># b</p>",
+      "want": { "result": "1\\. a\n\n\\# b", "warnings": {} }
+    },
+    {
+      "name": "html to markdown ends a code block with its fence",
+      "from": "html",
+      "to": "markdown",
+      "input": "<blockquote><p>q</p></blockquote><pre><code>x &lt; y</code></pre>",
+      "want": { "result": "> q\n\n```\nx < y\n```", "warnings": { "codeBoundary": 1 } }
+    },
+    {
+      "name": "html to markdown replaces an image with its text",
+      "from": "html",
+      "to": "markdown",
+      "input": "<p>a<img src=\"https://e.com/i.png\" alt=\"i\"></p>",
+      "want": { "result": "ai", "warnings": { "attributes": 1, "images": 1 } }
+    },
+    {
+      "name": "html to html keeps a list start",
+      "from": "html",
+      "to": "html",
+      "input": "<ol start=\"3\"><li>a&lt;b</li></ol>",
+      "want": { "result": "<ol start=\"3\"><li>a&lt;b</li></ol>", "warnings": {} }
+    },
+    {
+      "name": "html to plain writes lists and drops marks",
+      "from": "html",
+      "to": "plain",
+      "input": "<ul><li>one</li><li>two <b>b</b></li></ul><p>c</p>",
+      "want": { "result": "- one\n- two b\n\nc", "warnings": { "formatting": 1 } }
+    },
+    {
+      "name": "html to rich",
+      "from": "html",
+      "to": "rich",
+      "input": "<p><i>a</i></p>",
+      "want": { "result": "<p><em>a</em></p>", "plain": "a", "warnings": {} }
+    },
+    {
+      "name": "html to telegram writes a heading in bold",
+      "from": "html",
+      "to": "telegram",
+      "input": "<h1>T</h1><p>t</p>",
+      "want": { "result": "*T*\n\nt", "warnings": {} }
+    },
+    {
+      "name": "plain to plain collapses spaces and blank lines",
+      "from": "plain",
+      "to": "plain",
+      "input": "a  b\n\n\n\nc ",
+      "want": { "result": "a b\n\nc", "warnings": {} }
+    },
+    {
+      "name": "plain to markdown keeps line breaks",
+      "from": "plain",
+      "to": "markdown",
+      "input": "Line one\nLine two",
+      "want": { "result": "Line one\nLine two", "warnings": {} }
+    },
+    {
+      "name": "plain to rich",
+      "from": "plain",
+      "to": "rich",
+      "input": "a\nb",
+      "want": { "result": "<p>a<br>b</p>", "plain": "a\nb", "warnings": {} }
+    },
+    {
+      "name": "plain to telegram escapes reserved characters",
+      "from": "plain",
+      "to": "telegram",
+      "input": "1.5 * 2",
+      "want": { "result": "1\\.5 \\* 2", "warnings": {} }
+    },
+    {
+      "name": "rich to plain drops what never shows",
+      "from": "rich",
+      "to": "plain",
+      "input": "<b>a</b><script>x</script>",
+      "want": { "result": "a", "warnings": { "formatting": 1 } }
+    },
+    {
+      "name": "rich to markdown drops styling",
+      "from": "rich",
+      "to": "markdown",
+      "input": "x <span style=\"color:red\">y</span> <u>z</u>",
+      "want": { "result": "x y z", "warnings": {} }
+    },
+    {
+      "name": "rich to html",
+      "from": "rich",
+      "to": "html",
+      "input": "<b>a</b>",
+      "want": { "result": "<p><strong>a</strong></p>", "warnings": {} }
+    },
+    {
+      "name": "rich to rich",
+      "from": "rich",
+      "to": "rich",
+      "input": "<b>a</b>",
+      "want": { "result": "<p><strong>a</strong></p>", "plain": "a", "warnings": {} }
+    },
+    {
+      "name": "rich to telegram",
+      "from": "rich",
+      "to": "telegram",
+      "input": "<i>a</i>",
+      "want": { "result": "_a_", "warnings": {} }
+    },
+    {
+      "name": "empty text",
+      "from": "plain",
+      "to": "html",
+      "input": "",
+      "want": { "error": "length" }
+    },
+    {
+      "name": "text longer than the limit",
+      "from": "plain",
+      "to": "plain",
+      "input": "a",
+      "repeat": 30001,
+      "want": { "error": "length" }
+    },
+    {
+      "name": "NUL in text",
+      "from": "plain",
+      "to": "html",
+      "input": "a\u0000b",
+      "want": { "error": "unicode" }
+    },
+    {
+      "name": "nesting deeper than the model holds",
+      "from": "html",
+      "to": "plain",
+      "input": "<blockquote>a",
+      "repeat": 20,
+      "want": { "error": "structure" }
+    },
+    {
+      "name": "html with more tags than the limit",
+      "from": "html",
+      "to": "plain",
+      "input": "<i>",
+      "repeat": 2001,
+      "want": { "error": "htmlLimit" }
+    },
+    {
+      "name": "table wider than the model holds",
+      "from": "markdown",
+      "to": "plain",
+      "input": "|a|a|a|a|a|a|a|a|a|a|a|a|a|a|a|a|a|a|a|a|a|\n|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|",
+      "want": { "error": "table" }
+    }
+  ],
+  "clean": [
+    {
+      "name": "drops styling, wrappers and scripts",
+      "input": "<p style=\"color:red\">a<span>b</span></p><script>x</script>",
+      "want": { "result": "<p>ab</p>" }
+    },
+    {
+      "name": "keeps headings and tables",
+      "input": "<div><h3>t</h3><table><tr><td>1</td></tr></table></div>",
+      "want": { "result": "<h3>t</h3>\n<table>\n<tbody>\n<tr><td>1</td></tr>\n</tbody>\n</table>" }
+    }
+  ]
+}

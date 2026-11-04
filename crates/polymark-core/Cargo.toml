@@ -1,0 +1,23 @@
+[package]
+name = "polymark-core"
+description = "Plain text, Markdown, HTML and Telegram MarkdownV2 converted through one closed document model"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords = ["markdown", "html", "telegram", "converter", "text"]
+categories = ["text-processing", "parser-implementations"]
+include = ["src/**/*.rs", "Cargo.toml", "LICENSE"]
+
+[dependencies]
+html5ever.workspace = true
+pulldown-cmark.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+unicode-properties.workspace = true
+
+[lints]
+workspace = true

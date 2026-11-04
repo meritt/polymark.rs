@@ -1,0 +1,4 @@
+module PolymarkFFI {
+    header "polymark.h"
+    export *
+}
